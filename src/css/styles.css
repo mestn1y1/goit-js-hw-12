@@ -55,7 +55,7 @@ img {
   letter-spacing: 0.04em;
   color: #808080;
 }
-.btn {
+/* .btn-sub {
   border-radius: 8px;
   padding: 8px 16px;
   width: 91px;
@@ -67,6 +67,20 @@ img {
   line-height: 150%;
   letter-spacing: 0.04em;
   color: #fff;
+} */
+
+.button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button.is-hidden {
+  display: none;
+}
+
+.button > .spinner.is-hidden {
+  display: none;
 }
 
 .card-img {
