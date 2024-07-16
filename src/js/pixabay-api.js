@@ -19,7 +19,7 @@
 // }
 import axios from 'axios';
 
-export async function getPicturesByQuery(query, page) {
+export async function getPicturesByQuery(query, page, per_page = 20) {
   const params = {
     key: '44784729-ebc9a0f5cc587c2700d41657d',
     q: query,
@@ -27,7 +27,7 @@ export async function getPicturesByQuery(query, page) {
     orientation: 'horizontal',
     safesearch: true,
     page: page,
-    per_page: 15,
+    per_page: per_page,
   };
 
   const url = 'https://pixabay.com/api/';
