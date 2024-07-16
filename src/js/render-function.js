@@ -2,7 +2,7 @@ import SimpleLightbox from 'simplelightbox';
 
 export function renderImgCard(images) {
   const galleryList = document.querySelector('.gallery');
-  // galleryList.innerHTML = '';
+  galleryList.innerHTML = '';
   const markup = images
     .map(
       ({ largeImageURL, webformatURL, likes, views, comments, downloads }) =>
