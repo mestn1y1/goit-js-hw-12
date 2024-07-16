@@ -8,6 +8,8 @@ const loader = document.querySelector('.loader');
 const loadMoreBtn = document.querySelector('.button');
 const spinner = document.querySelector('.spinner');
 let query = '';
+let page = 1; // Початкова сторінка
+
 searchForm.addEventListener('submit', handlerSearch);
 
 const params = {
@@ -19,13 +21,11 @@ const params = {
 
 loadMoreFunction.hide(loadMoreBtn);
 
-//___________async function
-
 async function handlerSearch(evt) {
   evt.preventDefault();
 
   const form = evt.currentTarget;
-  const query = form.elements.query.value.trim().toLowerCase();
+  query = form.elements.query.value.trim().toLowerCase(); // Оновлюємо глобальну змінну query
 
   if (!query) {
     iziToast.error({
@@ -36,13 +36,13 @@ async function handlerSearch(evt) {
     });
     return;
   }
-
+  page = 1; // Скидаємо сторінку до початкового значення
   showLoader();
   loadMoreFunction.show(loadMoreBtn);
   loadMoreFunction.disable(loadMoreBtn, spinner);
 
   try {
-    const { hits, total } = await getPicturesByQuery(query);
+    const { hits, total } = await getPicturesByQuery(query, page);
     // розрахунок максимальної сторінки
     params.maxPage = Math.ceil(total / params.per_page);
 
@@ -61,14 +61,11 @@ async function handlerSearch(evt) {
 
     console.log(hits, total);
 
-    //перевірка на те, що по-перше, у нас взагалі є результати, і на те, що кількість статей не дорівнює кількості всіх результатів (якщо вони рівні, то у нас не існує наступних сторінок)
+    // Перевірка, чи потрібно показувати кнопку "Завантажити ще"
     if (hits.length !== total) {
-      // розблоковуємо кнопку для натискань
       loadMoreFunction.enable(loadMoreBtn, spinner);
-      // коли кнопка розблокується і стане доступною для взаємодії - ми повісимо на неї обробник
       loadMoreBtn.addEventListener('click', handleLoadMore);
     } else {
-      // ховаємо кнопку якщо немає результатів по запиту, або не існує наступної сторінки
       loadMoreFunction.hide(loadMoreBtn);
     }
   } catch (error) {
@@ -79,25 +76,22 @@ async function handlerSearch(evt) {
   }
 }
 
-// функция кнопки по обработчику
-
 async function handleLoadMore() {
-  params.page += 1;
+  page += 1; // Збільшуємо сторінку для наступного запиту
   loadMoreFunction.disable(loadMoreBtn, spinner);
 
   try {
-    const { hits } = await getPicturesByQuery(query);
+    const { hits } = await getPicturesByQuery(query, page); // Використовуємо оновлене значення query і page
 
-    // малюємо розмітку
+    // Малюємо нові зображення
     renderImgCard(hits);
   } catch (err) {
     console.log(err);
   } finally {
-    // розблоковуємо кнопку для натискань
     loadMoreFunction.enable(loadMoreBtn, spinner);
 
-    // якщо поточна сторінка рівна максимальні сторінці, то наступних сторінок не існує
-    if (params.page === params.maxPage) {
+    // Перевіряємо, чи досягли максимальної сторінки
+    if (page === params.maxPage) {
       loadMoreFunction.hide(loadMoreBtn);
       loadMoreBtn.removeEventListener('click', handleLoadMore);
     }

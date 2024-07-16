@@ -19,14 +19,14 @@
 // }
 import axios from 'axios';
 
-export async function getPicturesByQuery(query) {
+export async function getPicturesByQuery(query, page) {
   const params = {
     key: '44784729-ebc9a0f5cc587c2700d41657d',
     q: query,
     imageType: 'photo',
     orientation: 'horizontal',
     safesearch: true,
-    page: 1,
+    page: page,
     per_page: 15,
   };
 
