@@ -126,7 +126,7 @@ const loadMoreBtn = document.querySelector('.button');
 const spinner = document.querySelector('.spinner');
 let query = '';
 let page = 1;
-let galleryList; // Оголошуємо змінну для зберігання посилання на galleryList
+let galleryList;
 
 searchForm.addEventListener('submit', handlerSearch);
 
@@ -165,7 +165,6 @@ async function handlerSearch(evt) {
   galleryList.innerHTML = ''; // Очистка вмісту галереї перед новим запитом
 
   page = 1;
-  // showLoader();
   loadMoreFunction.show(loadMoreBtn);
   loadMoreFunction.disable(loadMoreBtn, spinner);
 
@@ -198,7 +197,6 @@ async function handlerSearch(evt) {
   } catch (error) {
     onFetchError(error);
   } finally {
-    // hideLoader();
     form.reset();
   }
 }
@@ -226,19 +224,19 @@ async function handleLoadMore() {
     if (page === params.maxPage) {
       loadMoreFunction.hide(loadMoreBtn);
       loadMoreBtn.removeEventListener('click', handleLoadMore);
+      iziToast.show({
+        title: 'No more results',
+        message: 'No more results available.',
+        position: 'bottomRight',
+        theme: 'blue',
+        timeout: 3000,
+        progressBarColor: '#444444',
+        icon: 'fa fa-info-circle',
+      });
     }
   }
 }
 
 function onFetchError(err) {
   console.error('Fetch Error:', err);
-  // hideLoader();
 }
-
-// function showLoader() {
-//   loader.style.display = 'block';
-// }
-
-// function hideLoader() {
-//   loader.style.display = 'none';
-// }
