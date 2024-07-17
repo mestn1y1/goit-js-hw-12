@@ -1,8 +1,8 @@
 import SimpleLightbox from 'simplelightbox';
 
 export function renderImgCard(images) {
+  // galleryList.innerHTML = '';
   const galleryList = document.querySelector('.gallery');
-  galleryList.innerHTML = '';
   const markup = images
     .map(
       ({ largeImageURL, webformatURL, likes, views, comments, downloads }) =>
@@ -40,4 +40,5 @@ export function renderImgCard(images) {
     captionsData: 'alt',
     captionDelay: 250,
   });
+  lightbox.refresh();
 }
